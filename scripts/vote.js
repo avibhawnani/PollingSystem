@@ -2,7 +2,7 @@ solc = require("solc");                //for compiling .sol file
 fs = require("fs");                    //for opening file
 Web3 = require("web3");  
 
-let web3 = new Web3(new Web3.providers.HttpProvider("HTTP://127.0.0.1:7545"));
+let web3 = new Web3(new Web3.providers.HttpProvider("Your Ganache server ID"));
 
 let fileContent = fs.readFileSync("contracts/Polling.sol").toString();
 // console.log(fileContent);
