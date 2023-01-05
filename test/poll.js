@@ -34,24 +34,38 @@ testCase("Deployment",function(){
             expect(await st).to.equal(proposal);
         });
 
-        it("Choices Check",async function(){
-            console.log("Choices : ",choices);
-            const ch = await poll.choices(0);
-            console.log("Code Choices Array : ",ch);
-            expect(await ch[0]).to.equal(choices[0]);  
-        });
+        // it("Choices Check",async function(){
+        //     console.log("Choices : ",choices);
+        //     const ch = await poll.choices(0);
+        //     console.log("Code Choices Array : ",ch);
+        //     expect(await ch[0]).to.equal(choices[0]);  
+        // });
 
         it("States Check - Polling Started",async function(){
-            const stat = await poll.state();
+            const stat = await poll.getState();
             console.log("State of the Poll : ",stat);
             expect(await stat).to.equal(0);
         });
 
         it("Check converted state - Voting Started",async function(){
             await poll.startVote();
-            const stat = await poll.state();
+            const stat = await poll.getState();
             console.log("State of the Poll : ",stat);
             expect(await stat).to.equal(1);
         });
+
+        it("Voting and Winner Declaration",async function(){
+            await poll.startVote();
+            await poll.connect(v1).Vote("Yes","Avi");
+            await poll.connect(v2).Vote("No","Yash");
+            await poll.connect(v3).Vote("Yes","Vikalp");
+            const info = await poll.VoteInfo();
+            console.log("Vote Info : ",info);
+            console.log("--------------------------------------");
+            await poll.endVote();
+            const winner = await poll.ResultDeclare();
+            console.log("Winner : ",winner);
+        });
+
     });
 });

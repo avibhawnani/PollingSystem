@@ -17,11 +17,11 @@ contract Polling{
     string public statement;                       //Proposal Statment of the Poll
 
     mapping(address=>Voter) private voters;         //Mapping Voter's Address (0x012AB..) -> Voter{John,false}
-    Choice[] public choices;                       //Choices Array : 0->Choice A , 1->Choice B
+    Choice[] private choices;                       //Choices Array : 0->Choice A , 1->Choice B
     mapping(string => uint) private choice_index;   //Mapping Choice with index: ChoiceNameA->0, ChoiceNameB->1
 
     enum States{Created,VotingStarted,VotingEnded}  //Enumeration for controlling Voting States
-    States public state;
+    States private state;
 
     modifier onlyOfficial(){                        //Check for Poll Creator
         require(msg.sender == OfficialAddress,"You are not the official");
@@ -88,6 +88,9 @@ contract Polling{
             voteInf[x] = choices[x].voteCount;
         }
         return voteInf;
+    }
+    function getState() public view returns(uint){  //returns the current state
+        return uint(state);
     }
 
 }
